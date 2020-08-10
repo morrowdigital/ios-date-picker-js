@@ -1,11 +1,10 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import Animated, { useCode, set, add } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
+import Animated, { add, set, useCode } from "react-native-reanimated";
 import { usePanGestureHandler } from "react-native-redash";
-
-import { ITEM_HEIGHT } from "./Constants";
 import { withDecay } from "./AnimationHelpers";
+import { ITEM_HEIGHT } from "./Constants";
 
 interface GestureHandlerProps {
   value: Animated.Value<number>;

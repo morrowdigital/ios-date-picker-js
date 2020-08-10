@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-import Picker from "./Picker";
+import PickerComponent from "./Picker";
 import { ITEM_HEIGHT } from "./Constants";
 
 const styles = StyleSheet.create({
@@ -64,7 +64,7 @@ const minValues = new Array(60)
   .map((_, i) => ({ value: i, label: `${i}`.padStart(2, "0") }));
 
 const initialDate = new Date();
-const PickerDemo = ({ minYear = 2010, maxYear = 2030 }) => {
+const Picker = ({ minYear = 2010, maxYear = 2030 }) => {
   const [yearValues] = useState(getYearValues(minYear, maxYear));
   let date = useRef(initialDate.getDate()).current;
   let month = useRef(initialDate.getUTCMonth()).current;
@@ -78,15 +78,15 @@ const PickerDemo = ({ minYear = 2010, maxYear = 2030 }) => {
   return (
     <View style={styles.container}>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Picker
-          onChange={(day) => {
+        <PickerComponent
+          onChange={(day: number) => {
             date = day;
           }}
           flex={1}
           values={dayValues}
           defaultValue={date - 1}
         />
-        <Picker
+        <PickerComponent
           onChange={(m) => {
             month = m;
             setDayValues(getDayValues(daysInMonth(year, month)));
@@ -95,7 +95,7 @@ const PickerDemo = ({ minYear = 2010, maxYear = 2030 }) => {
           values={monthValues}
           defaultValue={month}
         />
-        <Picker
+        <PickerComponent
           onChange={(y) => {
             year = y;
             console.log(getDate());
@@ -105,7 +105,7 @@ const PickerDemo = ({ minYear = 2010, maxYear = 2030 }) => {
           defaultValue={maxYear - year}
         />
         <View style={{ width: 10 }} />
-        <Picker
+        <PickerComponent
           onChange={(h) => {
             hours = h;
             console.log(getDate());
@@ -117,7 +117,7 @@ const PickerDemo = ({ minYear = 2010, maxYear = 2030 }) => {
         <View style={styles.separator}>
           <Text style={{ color: "white" }}>:</Text>
         </View>
-        <Picker
+        <PickerComponent
           onChange={(m) => {
             minutes = m;
             console.log(minutes, m);
@@ -132,4 +132,4 @@ const PickerDemo = ({ minYear = 2010, maxYear = 2030 }) => {
   );
 };
 
-export default PickerDemo;
+export default Picker;
