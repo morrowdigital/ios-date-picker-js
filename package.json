@@ -29,5 +29,7 @@
     "patch-package": "^6.1.2",
     "typescript": "~3.9.5"
   },
-  "private": true
+  "files": [
+    "dist"
+  ]
 }

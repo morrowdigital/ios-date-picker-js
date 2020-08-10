@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Button } from "react-native";
 
 import Picker from "./Picker";
 import { ITEM_HEIGHT } from "./Constants";
@@ -64,68 +64,91 @@ const minValues = new Array(60)
   .map((_, i) => ({ value: i, label: `${i}`.padStart(2, "0") }));
 
 const initialDate = new Date();
-const PickerDemo = ({ minYear = 2010, maxYear = 2030 }) => {
+
+export interface IPickerProps {
+  minYear?: number;
+  maxYear?: number;
+  onConfirm: (date: Date) => void;
+}
+
+const Picker = ({
+  minYear = 1994,
+  maxYear = 2020,
+  onConfirm,
+}: IPickerProps) => {
   const [yearValues] = useState(getYearValues(minYear, maxYear));
-  let date = useRef(initialDate.getDate()).current;
-  let month = useRef(initialDate.getUTCMonth()).current;
-  let year = useRef(initialDate.getUTCFullYear()).current;
-  let hours = useRef(initialDate.getHours()).current;
-  let minutes = useRef(initialDate.getUTCMinutes()).current;
+  const date = useRef(initialDate.getDate());
+  const month = useRef(initialDate.getUTCMonth());
+  const year = useRef(initialDate.getUTCFullYear());
+  const hours = useRef(initialDate.getHours());
+  const minutes = useRef(initialDate.getUTCMinutes());
   const [dayValues, setDayValues] = useState(
-    getDayValues(daysInMonth(year, month))
+    getDayValues(daysInMonth(year.current, month.current))
   );
-  const getDate = () => new Date(Date.UTC(year, month, date, hours, minutes));
+  const getDate = () =>
+    new Date(
+      Date.UTC(
+        year.current,
+        month.current,
+        date.current,
+        hours.current,
+        minutes.current
+      )
+    );
   return (
     <View style={styles.container}>
+      <Button title="confirm" onPress={() => onConfirm(getDate())} />
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Picker
-          onChange={(day) => {
-            date = day;
+        <PickerComponent
+          onChange={(day: number) => {
+            date.current = day;
           }}
           flex={1}
           values={dayValues}
-          defaultValue={date - 1}
+          defaultValue={date.current - 1}
         />
         <Picker
           onChange={(m) => {
-            month = m;
-            setDayValues(getDayValues(daysInMonth(year, month)));
+            month.current = m;
+            setDayValues(
+              getDayValues(daysInMonth(year.current, month.current))
+            );
           }}
           flex={1.5}
           values={monthValues}
-          defaultValue={month}
+          defaultValue={month.current}
         />
         <Picker
           onChange={(y) => {
-            year = y;
+            year.current = y;
             console.log(getDate());
           }}
           flex={1.5}
           values={yearValues}
-          defaultValue={maxYear - year}
+          defaultValue={maxYear - year.current}
         />
         <View style={{ width: 10 }} />
         <Picker
           onChange={(h) => {
-            hours = h;
+            hours.current = h;
             console.log(getDate());
           }}
           flex={1}
           values={hourValues}
-          defaultValue={hours}
+          defaultValue={hours.current}
         />
         <View style={styles.separator}>
           <Text style={{ color: "white" }}>:</Text>
         </View>
         <Picker
           onChange={(m) => {
-            minutes = m;
+            minutes.current = m;
             console.log(minutes, m);
             console.log(getDate());
           }}
           flex={1}
           values={minValues}
-          defaultValue={minutes}
+          defaultValue={minutes.current}
         />
       </View>
     </View>
