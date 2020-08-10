@@ -4005,6 +4005,16 @@ invariant@^2.2.2, invariant@^2.2.4:
   dependencies:
     loose-envify "^1.0.0"
 
+ios-date-picker-js@./ios-date-picker-js-0.0.1.tgz:
+  version "0.0.1"
+  resolved "./ios-date-picker-js-0.0.1.tgz#bdc32ae6318ed15761ccc9bd1e8ae03ade4b3fa2"
+  dependencies:
+    "@react-native-community/masked-view" "0.1.10"
+    react-native "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz"
+    react-native-gesture-handler "~1.6.0"
+    react-native-reanimated "~1.9.0"
+    react-native-redash "14.2.3"
+
 is-accessor-descriptor@^0.1.6:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/is-accessor-descriptor/-/is-accessor-descriptor-0.1.6.tgz#a9e12cb3ae8d876727eeef3843f8a0897b5c98d6"
