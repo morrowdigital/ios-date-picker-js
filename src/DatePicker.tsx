@@ -100,15 +100,13 @@ const DatePicker = ({
       <Button title="confirm" onPress={() => onConfirm(getDate())} />
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <PickerComponent
-          onChange={(day: number) => {
-            date.current = day;
-          }}
+          onChange={(day: number) => (date.current = day)}
           flex={1}
           values={dayValues}
           defaultValue={date.current - 1}
         />
         <PickerComponent
-          onChange={(m) => {
+          onChange={(m: number) => {
             month.current = m;
             setDayValues(
               getDayValues(daysInMonth(year.current, month.current))
@@ -119,20 +117,14 @@ const DatePicker = ({
           defaultValue={month.current}
         />
         <PickerComponent
-          onChange={(y) => {
-            year.current = y;
-            console.log(getDate());
-          }}
+          onChange={(y: number) => (year.current = y)}
           flex={1.5}
           values={yearValues}
           defaultValue={maxYear - year.current}
         />
         <View style={{ width: 10 }} />
         <PickerComponent
-          onChange={(h) => {
-            hours.current = h;
-            console.log(getDate());
-          }}
+          onChange={(h: number) => (hours.current = h)}
           flex={1}
           values={hourValues}
           defaultValue={hours.current}
@@ -141,11 +133,7 @@ const DatePicker = ({
           <Text style={{ color: "white" }}>:</Text>
         </View>
         <PickerComponent
-          onChange={(m) => {
-            minutes.current = m;
-            console.log(minutes, m);
-            console.log(getDate());
-          }}
+          onChange={(m: number) => (minutes.current = m)}
           flex={1}
           values={minValues}
           defaultValue={minutes.current}

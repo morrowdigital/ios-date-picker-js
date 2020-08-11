@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { PickerModal } from "./PickerModal";
 import { Provider } from "./context";
 
@@ -9,18 +9,12 @@ interface Props {
 export class PickerModalProvider extends React.Component<Props> {
   PickerModalRef: React.RefObject<any> = React.createRef();
 
-  getContext = () => {
-    console.log("here");
-
-    return {
-      dogs: "woof",
-      showPickerModal: (callback: (date: Date) => void) => {
-        console.log("here");
-        this.PickerModalRef.current !== null &&
-          this.PickerModalRef.current.showPickerModal(callback);
-      },
-    };
-  };
+  getContext = () => ({
+    showPickerModal: (callback: (date: Date) => void) => {
+      this.PickerModalRef.current !== null &&
+        this.PickerModalRef.current.showPickerModal(callback);
+    },
+  });
 
   render() {
     return (

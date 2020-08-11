@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import {
   Animated,
   BackHandler,
@@ -145,7 +145,6 @@ export const PickerModal: React.ForwardRefExoticComponent<
       if (isAnimating) {
         return false;
       }
-      console.log("selected", onSelectRef.current);
       onSelectRef.current?.(date);
       return animateOut();
     };
