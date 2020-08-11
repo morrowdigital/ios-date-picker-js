@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Animated,
   BackHandler,
@@ -9,7 +8,7 @@ import {
   View,
   ViewProps,
 } from "react-native";
-import {
+import React, {
   useState,
   useRef,
   useImperativeHandle,
@@ -28,6 +27,12 @@ const OPACITY_ANIMATION_OUT_TIME = 195;
 const EASING_OUT = Easing.bezier(0.25, 0.46, 0.45, 0.94);
 const EASING_IN = Easing.out(EASING_OUT);
 
+export interface IModalDatePickerProps {
+  initialDate?: Date;
+  minYear?: number;
+  maxYear?: number;
+}
+
 export const PickerModal: React.ForwardRefExoticComponent<
   PropsWithChildren<IPickerModalProps> & React.RefAttributes<any>
 > = React.forwardRef(
@@ -37,9 +42,8 @@ export const PickerModal: React.ForwardRefExoticComponent<
     const [isAnimating, setIsAnimating] = useState(false);
     const onSelectRef = useRef<((date: Date) => void) | null>(null);
     const [overlayOpacity] = useState(new Animated.Value(0));
+    const [options, setOptions] = useState<IModalDatePickerProps>({});
     const [sheetOpacity] = useState(new Animated.Value(0));
-
-    let deferNextShow: ((x: any) => void) | undefined;
 
     useImperativeHandle(ref, () => ({
       showPickerModal,
@@ -91,19 +95,26 @@ export const PickerModal: React.ForwardRefExoticComponent<
             ]}
           >
             <View style={styles.sheet} onLayout={setActionSheetHeight}>
-              <Picker onConfirm={onSelectLib} />
+              <Picker
+                minYear={options?.minYear}
+                maxYear={options?.maxYear}
+                initialDate={options?.initialDate}
+                onConfirm={onSelectLib}
+              />
             </View>
           </Animated.View>
         </TouchableWithoutFeedback>
       );
     };
 
-    const showPickerModal = (onSelect: (date: Date) => void) => {
+    const showPickerModal = (
+      onSelect: (date: Date) => void,
+      options: { initialDate?: Date; minYear?: number; maxYear?: number }
+    ) => {
       if (isVisible) {
-        deferNextShow = showPickerModal;
         return;
       }
-
+      setOptions(options || {});
       onSelectRef.current = onSelect;
       setIsVisible(true);
       setIsAnimating(true);
@@ -125,7 +136,6 @@ export const PickerModal: React.ForwardRefExoticComponent<
       ]).start((result) => {
         if (result.finished) {
           setIsAnimating(false);
-          deferNextShow = undefined;
         }
       });
       BackHandler.addEventListener(
@@ -175,10 +185,6 @@ export const PickerModal: React.ForwardRefExoticComponent<
           if (result.finished) {
             setIsVisible(false);
             setIsAnimating(false);
-
-            if (deferNextShow) {
-              deferNextShow(null);
-            }
           }
         });
       return true;
