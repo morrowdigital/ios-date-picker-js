@@ -7,6 +7,10 @@
     "build": "rollup -c",
     "start": "rollup -c -w"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/app-sapiens/ios-date-picker-js.git"
+  },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.10",
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
