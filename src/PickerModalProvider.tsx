@@ -6,7 +6,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export default class PickerModalProvider extends React.Component<Props> {
+export class PickerModalProvider extends React.Component<Props> {
   PickerModalRef: React.RefObject<any> = React.createRef();
 
   getContext = () => {

@@ -5,7 +5,7 @@ export interface PickerModalProps {
 }
 
 const context = React.createContext<PickerModalProps>({
-  showPickerModal: (callback: (date: Date) => void) => {},
+  showPickerModal: (_callback: (date: Date) => void) => {},
 });
 
 export function usePickerModal() {

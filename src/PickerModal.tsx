@@ -16,10 +16,10 @@ import {
   PropsWithChildren,
 } from "react";
 
-import Picker from ".";
+import Picker from "./DatePicker";
 
 interface IPickerModalProps {
-  readonly useNativeDriver: boolean | undefined;
+  readonly useNativeDriver?: boolean | undefined;
   readonly pointerEvents?: ViewProps["pointerEvents"];
 }
 
@@ -30,14 +30,14 @@ const EASING_IN = Easing.out(EASING_OUT);
 
 // let onSelectRef: (date: Date) => void;
 
-export const PickerModal: React.ForwardRefExoticComponent<PropsWithChildren<
-  IPickerModalProps
->> = React.forwardRef(
+export const PickerModal: React.ForwardRefExoticComponent<
+  PropsWithChildren<IPickerModalProps> & React.RefAttributes<any>
+> = React.forwardRef(
   ({ children, pointerEvents, useNativeDriver = true }, ref) => {
     let actionSheetHeight = 360;
     const [isVisible, setIsVisible] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
-    const onSelectRef = useRef<(date: Date) => void>(null);
+    const onSelectRef = useRef<((date: Date) => void) | null>(null);
     const [overlayOpacity] = useState(new Animated.Value(0));
     const [sheetOpacity] = useState(new Animated.Value(0));
 
@@ -180,7 +180,7 @@ export const PickerModal: React.ForwardRefExoticComponent<PropsWithChildren<
             setIsAnimating(false);
 
             if (deferNextShow) {
-              deferNextShow();
+              deferNextShow(null);
             }
           }
         });
