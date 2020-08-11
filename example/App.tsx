@@ -3,7 +3,7 @@ import { StatusBar, Button, View, Text } from "react-native";
 import { PickerModalProvider, usePickerModal } from "ios-date-picker-js";
 
 const App = () => {
-  const [x, setx] = useState("");
+  const [x, setX] = useState("");
   const { showPickerModal } = usePickerModal();
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -11,7 +11,7 @@ const App = () => {
       <Button
         onPress={() =>
           showPickerModal((date) => {
-            setx(date.toISOString());
+            setX(date.toISOString());
           })
         }
         title="Press"

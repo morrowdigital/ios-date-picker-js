@@ -106,8 +106,8 @@ const DatePicker = ({
           defaultValue={date.current - 1}
         />
         <PickerComponent
-          onChange={(m: number) => {
-            month.current = m;
+          onChange={(monthPosition: number) => {
+            month.current = monthPosition;
             setDayValues(
               getDayValues(daysInMonth(year.current, month.current))
             );
@@ -117,14 +117,14 @@ const DatePicker = ({
           defaultValue={month.current}
         />
         <PickerComponent
-          onChange={(y: number) => (year.current = y)}
+          onChange={(yearPosition: number) => (year.current = yearPosition)}
           flex={1.5}
           values={yearValues}
           defaultValue={maxYear - year.current}
         />
         <View style={{ width: 10 }} />
         <PickerComponent
-          onChange={(h: number) => (hours.current = h)}
+          onChange={(hourPosition: number) => (hours.current = hourPosition)}
           flex={1}
           values={hourValues}
           defaultValue={hours.current}
@@ -133,7 +133,9 @@ const DatePicker = ({
           <Text style={{ color: "white" }}>:</Text>
         </View>
         <PickerComponent
-          onChange={(m: number) => (minutes.current = m)}
+          onChange={(minutePosition: number) =>
+            (minutes.current = minutePosition)
+          }
           flex={1}
           values={minValues}
           defaultValue={minutes.current}
