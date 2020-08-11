@@ -43,7 +43,12 @@ interface PickerProps {
   onChange: (value: number) => void;
 }
 
-const Picker = ({ values, defaultValue, flex, onChange }: PickerProps) => {
+const PickerComponent = ({
+  values,
+  defaultValue,
+  flex,
+  onChange,
+}: PickerProps) => {
   const translateY = useValue(0);
   const maskElement = (
     <Animated.View style={{ transform: [{ translateY }] }}>
@@ -118,4 +123,4 @@ const Picker = ({ values, defaultValue, flex, onChange }: PickerProps) => {
   );
 };
 
-export default Picker;
+export default PickerComponent;
