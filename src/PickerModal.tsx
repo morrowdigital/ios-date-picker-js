@@ -2,7 +2,6 @@ import {
   Animated,
   BackHandler,
   Easing,
-  Modal,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
@@ -194,14 +193,10 @@ export const PickerModal: React.ForwardRefExoticComponent<
       <View pointerEvents={pointerEvents} style={styles.flexContainer}>
         {appContent}
         {isVisible && (
-          <Modal
-            animationType="none"
-            transparent={true}
-            onRequestClose={selectCancelButton}
-          >
+          <>
             {overlay}
             {renderSheet()}
-          </Modal>
+          </>
         )}
       </View>
     );
