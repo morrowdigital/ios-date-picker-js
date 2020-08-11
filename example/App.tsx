@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StatusBar, Button, View, Text } from "react-native";
-import { PickerModalProvider, usePickerModal } from "ios-date-picker-js";
+
+import { PickerModalProvider, usePickerModal } from "./src";
 
 const App = () => {
   const [x, setX] = useState("");
@@ -10,9 +11,12 @@ const App = () => {
       <StatusBar barStyle="light-content" />
       <Button
         onPress={() =>
-          showPickerModal((date) => {
-            setX(date.toISOString());
-          })
+          showPickerModal(
+            (date) => {
+              setX(date.toISOString());
+            },
+            { initialDate: new Date(2002, 11, 1), minYear: 2002, maxYear: 2003 }
+          )
         }
         title="Press"
       />

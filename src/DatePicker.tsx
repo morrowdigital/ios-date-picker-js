@@ -63,17 +63,17 @@ const minValues = new Array(60)
   .fill(0)
   .map((_, i) => ({ value: i, label: `${i}`.padStart(2, "0") }));
 
-const initialDate = new Date();
-
 export interface IDatePickerProps {
   minYear?: number;
   maxYear?: number;
+  initialDate?: Date;
   onConfirm: (date: Date) => void;
 }
 
 const DatePicker = ({
   minYear = 1994,
   maxYear = 2020,
+  initialDate = new Date(),
   onConfirm,
 }: IDatePickerProps) => {
   const [yearValues] = useState(getYearValues(minYear, maxYear));

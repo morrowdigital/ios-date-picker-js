@@ -4005,10 +4005,9 @@ invariant@^2.2.2, invariant@^2.2.4:
   dependencies:
     loose-envify "^1.0.0"
 
-ios-date-picker-js@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/ios-date-picker-js/-/ios-date-picker-js-0.0.1.tgz#d4ae6d0999e89f3dad8c2387252a42b1a38cc9b3"
-  integrity sha512-VZXCOBqSnGCGvYxqy79IYycRFxbPOHWN4toK2CPZvvhgkMpO1iD6f94Dp9wbklMysctFrJi/i9fzc7yEJ+Jx9w==
+ios-date-picker-js@./ios-date-picker-js-v0.1.0.tgz:
+  version "0.1.0"
+  resolved "./ios-date-picker-js-v0.1.0.tgz#919d3ea1911152c13f27d6db3158fb2bcbde0daa"
   dependencies:
     "@react-native-community/masked-view" "0.1.10"
     react-native "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz"
