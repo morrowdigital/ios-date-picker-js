@@ -11,7 +11,6 @@ const App = () => {
       <Button
         onPress={() =>
           showPickerModal((date) => {
-            console.log(date);
             setx(date.toISOString());
           })
         }
