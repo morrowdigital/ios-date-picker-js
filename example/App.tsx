@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { StatusBar, Button, View, Text } from "react-native";
 
-import { PickerModalProvider, usePickerModal } from "./src";
+// swap these imports during dev
+// import { PickerModalProvider, usePickerModal } from "common";
+import { PickerModalProvider, usePickerModal } from "ios-date-picker-js";
 
 const App = () => {
   const [x, setX] = useState("");
