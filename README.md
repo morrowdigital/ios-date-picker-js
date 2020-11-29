@@ -18,3 +18,10 @@ There has been a notable abscence of good JS-only date time pickers for React Na
 When [@wcandillion](https://github.com/wcandillon) created his Picker video I felt obliged to create this repo.
 
 Help needed to make this a useable library!
+
+
+## Dev instructions
+1. run `yarn`in both example directory and main directory
+2. run `yarn start` in main directory to bundle the library and watch for changes
+3. use `yarn link` to create a sym link between the library and the example app
+4. run example app with `yarn start`
