@@ -71,18 +71,18 @@ export interface IDatePickerProps {
 }
 
 const DatePicker = ({
-  minYear = 1994,
+  minYear = 1900,
   maxYear = 2020,
   initialDate = new Date(),
   onConfirm,
 }: IDatePickerProps) => {
   const [yearValues] = useState(getYearValues(minYear, maxYear));
-  const date = useRef(initialDate.getDate());
+  const date = useRef(initialDate.getDate() - 1);
   const month = useRef(initialDate.getUTCMonth());
   const year = useRef(initialDate.getUTCFullYear());
   const hours = useRef(initialDate.getHours());
   const minutes = useRef(initialDate.getUTCMinutes());
-  const [dayValues, setDayValues] = useState(
+  const [dayValues] = useState(
     getDayValues(daysInMonth(year.current, month.current))
   );
   const getDate = () =>
@@ -90,8 +90,8 @@ const DatePicker = ({
       Date.UTC(
         year.current,
         month.current,
-        date.current,
-        hours.current,
+        date.current + 1,
+        hours.current - 1,
         minutes.current
       )
     );
@@ -100,27 +100,34 @@ const DatePicker = ({
       <Button title="confirm" onPress={() => onConfirm(getDate())} />
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <PickerComponent
-          onChange={(day: number) => (date.current = day)}
+          onChange={(day: number) => {
+            console.log(day);
+            date.current = day;
+          }}
           flex={1}
           values={dayValues}
-          defaultValue={date.current - 1}
+          defaultValue={date.current}
         />
         <PickerComponent
           onChange={(monthPosition: number) => {
             month.current = monthPosition;
-            setDayValues(
-              getDayValues(daysInMonth(year.current, month.current))
-            );
+            // setDayValues(
+            //   getDayValues(daysInMonth(year.current, month.current))
+            // );
           }}
           flex={1.5}
           values={monthValues}
           defaultValue={month.current}
         />
         <PickerComponent
-          onChange={(yearPosition: number) => (year.current = yearPosition)}
+          onChange={(yearPosition: number) =>
+            (year.current = yearValues[yearPosition].value)
+          }
           flex={1.5}
           values={yearValues}
-          defaultValue={maxYear - year.current}
+          defaultValue={yearValues.findIndex(
+            ({ value }) => value === year.current
+          )}
         />
         <View style={{ width: 10 }} />
         <PickerComponent

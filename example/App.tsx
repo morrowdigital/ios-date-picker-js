@@ -2,27 +2,41 @@ import React, { useState } from "react";
 import { StatusBar, Button, View, Text } from "react-native";
 
 // swap these imports during dev
-// import { PickerModalProvider, usePickerModal } from "common";
-import { PickerModalProvider, usePickerModal } from "ios-date-picker-js";
+import { PickerModalProvider, usePickerModal } from "common";
+// import { PickerModalProvider, usePickerModal } from "ios-date-picker-js";
 
 const App = () => {
-  const [x, setX] = useState("");
-  const { showPickerModal } = usePickerModal();
+  const [x, setX] = useState(new Date().toISOString());
+  const { showPickerModal } = usePickerModal({ minYear: 2015 });
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "black",
+      }}
+    >
       <StatusBar barStyle="light-content" />
       <Button
         onPress={() =>
           showPickerModal(
             (date) => {
+              console.log(date);
               setX(date.toISOString());
             },
-            { initialDate: new Date(2002, 11, 1), minYear: 2002, maxYear: 2003 }
+            { initialDate: new Date(x) }
           )
         }
         title="Press"
       />
-      <Text>{x}</Text>
+      <Text
+        style={{
+          color: "white",
+        }}
+      >
+        {x}
+      </Text>
     </View>
   );
 };

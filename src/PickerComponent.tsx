@@ -1,19 +1,20 @@
-import React from "react";
-import { View, StyleSheet, Text, Platform } from "react-native";
-import Animated, {
-  interpolate,
-  Extrapolate,
-  multiply,
-  cos,
-  sub,
-  asin,
-  divide,
-} from "react-native-reanimated";
-import { useValue, translateZ } from "react-native-redash";
+import React, { useCallback, useRef } from "react";
+import { View, StyleSheet, Text, FlatList } from "react-native";
 import MaskedView from "@react-native-community/masked-view";
 
-import GestureHandler from "./GestureHandler";
 import { VISIBLE_ITEMS, ITEM_HEIGHT } from "./Constants";
+import Animated, {
+  Extrapolate,
+  interpolate,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+
+const AnimatedFlatList: typeof FlatList = Animated.createAnimatedComponent(
+  FlatList
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -43,65 +44,76 @@ interface PickerProps {
   onChange: (value: number) => void;
 }
 
+const AnimatedItem = ({ item, index, translateY, scrolled }: any) => {
+  const style = useAnimatedStyle(() => {
+    const y = interpolate(
+      translateY.value - index * ITEM_HEIGHT,
+      [-ITEM_HEIGHT * 2, 0, ITEM_HEIGHT * 2],
+      [-0.8, 0, 0.8],
+      Extrapolate.CLAMP
+    );
+    const rotateX = Math.asin(y);
+    const z = RADIUS * Math.cos(rotateX) - RADIUS;
+    const opacity = withTiming(scrolled.value ? 1 : 0);
+
+    return {
+      opacity,
+      transform: [
+        { perspective },
+        { rotateX: rotateX + "rad" },
+        { scale: perspective / (perspective - z) },
+      ],
+    };
+  });
+  return (
+    <Animated.View key={item.value} style={[styles.item, style]}>
+      <Text style={styles.label}>{item.label}</Text>
+    </Animated.View>
+  );
+};
+
 const PickerComponent = ({
   values,
   defaultValue,
   flex,
   onChange,
 }: PickerProps) => {
-  const translateY = useValue(0);
-  const maskElement = (
-    <Animated.View style={{ transform: [{ translateY }] }}>
-      {values.map((v, i) => {
-        const y = interpolate(
-          divide(sub(translateY, ITEM_HEIGHT * 2), -ITEM_HEIGHT),
-          {
-            inputRange: [i - RADIUS_REL, i, i + RADIUS_REL],
-            outputRange: [-1, 0, 1],
-            extrapolate: Extrapolate.CLAMP,
-          }
-        );
-        const rotateX = asin(y);
-        const z = sub(multiply(RADIUS, cos(rotateX)), RADIUS);
-        const opacity =
-          Platform.OS === "ios"
-            ? 1
-            : interpolate(y, {
-                outputRange: [0, 1, 0],
-                inputRange: [-1, 0, 1],
-              });
-        return (
-          <Animated.View
-            key={v.value}
-            style={[
-              styles.item,
-              {
-                transform: [
-                  { perspective },
-                  { rotateX },
-                  translateZ(perspective, z),
-                ],
-                opacity,
-              },
-            ]}
-          >
-            <Text style={styles.label}>{v.label}</Text>
-          </Animated.View>
-        );
-      })}
-    </Animated.View>
+  const ref = useRef<FlatList<string>>(null);
+  const translateY = useSharedValue(0);
+  const scrolled = useSharedValue(false);
+
+  // useEffect(() => {
+  //   ref?.current?.scrollToOffset({
+  //     offset: defaultValue * ITEM_HEIGHT,
+  //   });
+  // }, [defaultValue]);
+
+  const onScroll = useAnimatedScrollHandler<{ beginY?: number; endY?: number }>(
+    {
+      onScroll: (event) => {
+        translateY.value = event.contentOffset.y;
+        const value = event.contentOffset.y / ITEM_HEIGHT;
+        if (value % 1 === 0) {
+          onChange(value);
+        }
+      },
+    }
   );
+
+  const renderItem = useCallback(
+    ({ item, index }: any) => (
+      <AnimatedItem
+        item={item}
+        index={index}
+        scrolled={scrolled}
+        translateY={translateY}
+      />
+    ),
+    []
+  );
+
   return (
     <View style={[styles.container, { flex }]}>
-      {Platform.OS === "ios" ? (
-        <MaskedView {...{ maskElement }}>
-          <View style={{ height: ITEM_HEIGHT * 2, backgroundColor: "grey" }} />
-          <View style={{ height: ITEM_HEIGHT, backgroundColor: "white" }} />
-          <View style={{ height: ITEM_HEIGHT * 2, backgroundColor: "grey" }} />
-        </MaskedView>
-      ) : (
-        maskElement
-      )}
       <View style={StyleSheet.absoluteFill}>
         <View
           style={{
@@ -113,12 +125,37 @@ const PickerComponent = ({
           }}
         />
       </View>
-      <GestureHandler
-        max={values.length}
-        value={translateY}
-        onChange={(index) => onChange(values[index]?.value)}
-        defaultValue={defaultValue * -ITEM_HEIGHT}
-      />
+      <MaskedView
+        maskElement={
+          <View style={{ height: ITEM_HEIGHT * 5 }}>
+            <View style={{ flex: 2, backgroundColor: "white", opacity: 0.5 }} />
+            <View style={{ flex: 1, backgroundColor: "white" }} />
+            <View style={{ flex: 2, backgroundColor: "white", opacity: 0.5 }} />
+          </View>
+        }
+      >
+        <AnimatedFlatList
+          onLayout={() => {
+            ref?.current?.scrollToIndex({
+              index: defaultValue,
+              animated: false,
+            });
+            scrolled.value = true;
+          }}
+          ref={ref}
+          getItemLayout={(_, index) => ({
+            length: ITEM_HEIGHT,
+            offset: ITEM_HEIGHT * index,
+            index,
+          })}
+          keyExtractor={({ label }: any) => label}
+          contentContainerStyle={{ paddingVertical: ITEM_HEIGHT * 2 }}
+          data={values}
+          renderItem={renderItem}
+          snapToInterval={ITEM_HEIGHT}
+          onScroll={onScroll}
+        />
+      </MaskedView>
     </View>
   );
 };

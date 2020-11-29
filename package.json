@@ -12,31 +12,36 @@
     "url": "https://github.com/app-sapiens/ios-date-picker-js.git"
   },
   "dependencies": {
+    "@babel/core": "^7.12.9",
     "@react-native-community/masked-view": "0.1.10",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
+    "@types/lodash.debounce": "^4.0.6",
+    "expo-linear-gradient": "^8.3.1",
+    "lodash.debounce": "^4.0.8",
     "react-native-gesture-handler": "~1.6.0",
-    "react-native-reanimated": "~1.9.0",
-    "react-native-redash": "14.2.3"
+    "react-native-redash": "^15.11.1"
   },
   "peerDependencies": {
     "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react-dom": "^16.8.0",
+    "react-native": "^0.63.2",
+    "react-native-reanimated": "2.0.0-alpha.6.1"
   },
   "devDependencies": {
     "@types/color": "^3.0.1",
     "@types/react": "~16.9.41",
-    "@types/react-native": "~0.62.13",
-    "babel-preset-expo": "^8.2.3",
-    "eslint": "7.5.0",
-    "typescript": "~3.9.5",
     "@types/react-dom": "^16.0.5",
+    "@types/react-native": "~0.62.13",
     "babel-core": "^6.26.3",
+    "babel-preset-expo": "^8.2.3",
     "babel-runtime": "^6.26.0",
+    "eslint": "7.5.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-native-reanimated": "2.0.0-alpha.6.1",
     "rollup": "^1.29.0",
     "rollup-plugin-sass": "^1.2.2",
-    "rollup-plugin-typescript2": "^0.25.3"
+    "rollup-plugin-typescript2": "^0.25.3",
+    "typescript": "~3.9.5"
   },
   "files": [
     "dist"

@@ -4,6 +4,8 @@ import {
   View,
   ViewProps,
   SafeAreaView,
+  TouchableWithoutFeedback,
+  Modal,
 } from "react-native";
 import React, {
   useState,
@@ -87,25 +89,24 @@ export const PickerModal: React.ForwardRefExoticComponent<
     <View pointerEvents={pointerEvents} style={styles.flexContainer}>
       {appContent}
 
-      {isVisible && (
+      <Modal visible={isVisible} transparent animationType="slide">
         <SafeAreaView style={styles.modal}>
-          {/* <TouchableWithoutFeedback
+          <TouchableWithoutFeedback
             importantForAccessibility="yes"
-            // onPress={selectCancelButton}
-          > */}
-          <View style={styles.sheetContainer}>
-            <View style={styles.sheet}>
-              <Picker
-                minYear={options?.minYear}
-                maxYear={options?.maxYear}
-                initialDate={options?.initialDate}
-                onConfirm={onSelectLib}
-              />
-            </View>
+            onPress={selectCancelButton}
+          >
+            <View style={styles.sheetContainer}></View>
+          </TouchableWithoutFeedback>
+          <View style={styles.sheet}>
+            <Picker
+              minYear={options?.minYear}
+              maxYear={options?.maxYear}
+              initialDate={options?.initialDate}
+              onConfirm={onSelectLib}
+            />
           </View>
-          {/* </TouchableWithoutFeedback> */}
         </SafeAreaView>
-      )}
+      </Modal>
     </View>
   );
 });
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
   },
   sheetContainer: {
     flex: 1,
-    backgroundColor: "rgba(255,255,255,0.7)",
+    // backgroundColor: "rgba(0,0,0,0.7)",
     justifyContent: "flex-end",
   },
   sheet: {
