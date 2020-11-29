@@ -100,10 +100,7 @@ const DatePicker = ({
       <Button title="confirm" onPress={() => onConfirm(getDate())} />
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <PickerComponent
-          onChange={(day: number) => {
-            console.log(day);
-            date.current = day;
-          }}
+          onChange={(day: number) => (date.current = day)}
           flex={1}
           values={dayValues}
           defaultValue={date.current}

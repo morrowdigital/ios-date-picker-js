@@ -7,7 +7,7 @@ import { PickerModalProvider, usePickerModal } from "common";
 
 const App = () => {
   const [x, setX] = useState(new Date().toISOString());
-  const { showPickerModal } = usePickerModal({ minYear: 2015 });
+  const { showPickerModal } = usePickerModal();
   return (
     <View
       style={{
@@ -25,7 +25,7 @@ const App = () => {
               console.log(date);
               setX(date.toISOString());
             },
-            { initialDate: new Date(x) }
+            { initialDate: new Date(x), minYear: 1915 }
           )
         }
         title="Press"

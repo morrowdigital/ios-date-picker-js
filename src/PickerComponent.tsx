@@ -44,7 +44,7 @@ interface PickerProps {
   onChange: (value: number) => void;
 }
 
-const AnimatedItem = ({ item, index, translateY, scrolled }: any) => {
+const AnimatedItem = ({ item, index, translateY }: any) => {
   const style = useAnimatedStyle(() => {
     const y = interpolate(
       translateY.value - index * ITEM_HEIGHT,
@@ -54,10 +54,8 @@ const AnimatedItem = ({ item, index, translateY, scrolled }: any) => {
     );
     const rotateX = Math.asin(y);
     const z = RADIUS * Math.cos(rotateX) - RADIUS;
-    const opacity = withTiming(scrolled.value ? 1 : 0);
 
     return {
-      opacity,
       transform: [
         { perspective },
         { rotateX: rotateX + "rad" },
@@ -80,7 +78,7 @@ const PickerComponent = ({
 }: PickerProps) => {
   const ref = useRef<FlatList<string>>(null);
   const translateY = useSharedValue(0);
-  const scrolled = useSharedValue(false);
+  const scrolled: Animated.SharedValue<boolean> = useSharedValue(false);
 
   // useEffect(() => {
   //   ref?.current?.scrollToOffset({
@@ -93,12 +91,18 @@ const PickerComponent = ({
       onScroll: (event) => {
         translateY.value = event.contentOffset.y;
         const value = event.contentOffset.y / ITEM_HEIGHT;
-        if (value % 1 === 0) {
-          onChange(value);
+        if (!scrolled.value) return (scrolled.value = true);
+
+        if (value % 1 === 0 && scrolled.value) {
+          return onChange(value);
         }
       },
     }
   );
+
+  const opacity = useAnimatedStyle(() => ({
+    opacity: withTiming(scrolled.value ? 1 : 0, { duration: 1000 }),
+  }));
 
   const renderItem = useCallback(
     ({ item, index }: any) => (
@@ -140,7 +144,9 @@ const PickerComponent = ({
               index: defaultValue,
               animated: false,
             });
-            scrolled.value = true;
+            if (defaultValue === 0) {
+              scrolled.value = true;
+            }
           }}
           ref={ref}
           getItemLayout={(_, index) => ({
@@ -149,7 +155,10 @@ const PickerComponent = ({
             index,
           })}
           keyExtractor={({ label }: any) => label}
-          contentContainerStyle={{ paddingVertical: ITEM_HEIGHT * 2 }}
+          style={opacity}
+          contentContainerStyle={{
+            paddingVertical: ITEM_HEIGHT * 2,
+          }}
           data={values}
           renderItem={renderItem}
           snapToInterval={ITEM_HEIGHT}
