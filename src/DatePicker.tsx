@@ -4,24 +4,6 @@ import { View, Text, StyleSheet, Button } from "react-native";
 import PickerComponent from "./PickerComponent";
 import { ITEM_HEIGHT } from "./Constants";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "black",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 10,
-  },
-  separator: {
-    borderBottomColor: "grey",
-    borderBottomWidth: 1,
-    borderTopColor: "grey",
-    borderTopWidth: 1,
-    height: ITEM_HEIGHT,
-    justifyContent: "center",
-  },
-});
-
 const getYearValues = (min: number, max: number) => {
   const yearValues = new Array(max - min + 1)
     .fill(0)
@@ -98,7 +80,7 @@ const DatePicker = ({
   return (
     <View style={styles.container}>
       <Button title="confirm" onPress={() => onConfirm(getDate())} />
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <View style={styles.pickerContainer}>
         <PickerComponent
           onChange={(day: number) => (date.current = day)}
           flex={1}
@@ -126,15 +108,15 @@ const DatePicker = ({
             ({ value }) => value === year.current
           )}
         />
-        <View style={{ width: 10 }} />
+        <View style={styles.emptySpace} />
         <PickerComponent
           onChange={(hourPosition: number) => (hours.current = hourPosition)}
           flex={1}
           values={hourValues}
           defaultValue={hours.current}
         />
-        <View style={styles.separator}>
-          <Text style={{ color: "white" }}>:</Text>
+        <View style={styles.separatorContainer}>
+          <Text style={styles.seperator}>:</Text>
         </View>
         <PickerComponent
           onChange={(minutePosition: number) =>
@@ -150,3 +132,31 @@ const DatePicker = ({
 };
 
 export default DatePicker;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 10,
+  },
+  pickerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  separatorContainer: {
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
+    borderTopColor: "grey",
+    borderTopWidth: 1,
+    height: ITEM_HEIGHT,
+    justifyContent: "center",
+  },
+  seperator: {
+    color: "white",
+  },
+  emptySpace: {
+    width: 10,
+  },
+});

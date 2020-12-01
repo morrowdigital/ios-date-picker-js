@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StatusBar, Button, View, Text } from "react-native";
+import { StyleSheet, StatusBar, Button, View, Text } from "react-native";
 
 // swap these imports during dev
 import { PickerModalProvider, usePickerModal } from "common";
@@ -9,14 +9,7 @@ const App = () => {
   const [x, setX] = useState(new Date().toISOString());
   const { showPickerModal } = usePickerModal();
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "black",
-      }}
-    >
+    <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <Button
         onPress={() =>
@@ -46,3 +39,12 @@ export default () => (
     <App />
   </PickerModalProvider>
 );
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "black",
+  },
+});

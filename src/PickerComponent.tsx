@@ -15,24 +15,6 @@ import Animated, {
 const AnimatedFlatList: typeof FlatList = Animated.createAnimatedComponent(
   FlatList
 );
-
-const styles = StyleSheet.create({
-  container: {
-    height: ITEM_HEIGHT * VISIBLE_ITEMS,
-    overflow: "hidden",
-  },
-  item: {
-    height: ITEM_HEIGHT,
-    justifyContent: "center",
-  },
-  label: {
-    color: "white",
-    fontSize: 24,
-    lineHeight: ITEM_HEIGHT,
-    textAlign: "center",
-    textAlignVertical: "center",
-  },
-});
 const perspective = 600;
 const RADIUS_REL = VISIBLE_ITEMS * 0.5;
 const RADIUS = RADIUS_REL * ITEM_HEIGHT;
@@ -80,12 +62,6 @@ const PickerComponent = ({
   const translateY = useSharedValue(0);
   const scrolled: Animated.SharedValue<boolean> = useSharedValue(false);
 
-  // useEffect(() => {
-  //   ref?.current?.scrollToOffset({
-  //     offset: defaultValue * ITEM_HEIGHT,
-  //   });
-  // }, [defaultValue]);
-
   const onScroll = useAnimatedScrollHandler<{ beginY?: number; endY?: number }>(
     {
       onScroll: (event) => {
@@ -119,22 +95,14 @@ const PickerComponent = ({
   return (
     <View style={[styles.container, { flex }]}>
       <View style={StyleSheet.absoluteFill}>
-        <View
-          style={{
-            borderColor: "grey",
-            borderTopWidth: 1,
-            borderBottomWidth: 1,
-            top: ITEM_HEIGHT * 2,
-            height: ITEM_HEIGHT,
-          }}
-        />
+        <View style={styles.border} />
       </View>
       <MaskedView
         maskElement={
-          <View style={{ height: ITEM_HEIGHT * 5 }}>
-            <View style={{ flex: 2, backgroundColor: "white", opacity: 0.5 }} />
-            <View style={{ flex: 1, backgroundColor: "white" }} />
-            <View style={{ flex: 2, backgroundColor: "white", opacity: 0.5 }} />
+          <View style={styles.maskContainer}>
+            <View style={styles.maskBottom} />
+            <View style={styles.maskTop} />
+            <View style={styles.maskBottom} />
           </View>
         }
       >
@@ -170,3 +138,40 @@ const PickerComponent = ({
 };
 
 export default PickerComponent;
+
+const styles = StyleSheet.create({
+  container: {
+    height: ITEM_HEIGHT * VISIBLE_ITEMS,
+    overflow: "hidden",
+  },
+  border: {
+    borderColor: "grey",
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    top: ITEM_HEIGHT * 2,
+    height: ITEM_HEIGHT,
+  },
+  item: {
+    height: ITEM_HEIGHT,
+    justifyContent: "center",
+  },
+  label: {
+    color: "white",
+    fontSize: 24,
+    lineHeight: ITEM_HEIGHT,
+    textAlign: "center",
+    textAlignVertical: "center",
+  },
+  maskContainer: {
+    height: ITEM_HEIGHT * 5,
+  },
+  maskTop: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+  maskBottom: {
+    flex: 2,
+    backgroundColor: "white",
+    opacity: 0.5,
+  },
+});
