@@ -100,9 +100,9 @@ const PickerComponent = ({
       <MaskedView
         maskElement={
           <View style={styles.maskContainer}>
-            <View style={styles.maskBottom} />
-            <View style={styles.maskTop} />
-            <View style={styles.maskBottom} />
+            <View style={styles.maskEdge} />
+            <View style={styles.maskCenter} />
+            <View style={styles.maskEdge} />
           </View>
         }
       >
@@ -165,11 +165,11 @@ const styles = StyleSheet.create({
   maskContainer: {
     height: ITEM_HEIGHT * 5,
   },
-  maskTop: {
+  maskCenter: {
     flex: 1,
     backgroundColor: "white",
   },
-  maskBottom: {
+  maskEdge: {
     flex: 2,
     backgroundColor: "white",
     opacity: 0.5,
