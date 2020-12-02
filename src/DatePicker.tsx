@@ -116,7 +116,7 @@ const DatePicker = ({
           defaultValue={hours.current}
         />
         <View style={styles.separatorContainer}>
-          <Text style={styles.seperator}>:</Text>
+          <Text style={styles.separator}>:</Text>
         </View>
         <PickerComponent
           onChange={(minutePosition: number) =>
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     height: ITEM_HEIGHT,
     justifyContent: "center",
   },
-  seperator: {
+  separator: {
     color: "white",
   },
   emptySpace: {
