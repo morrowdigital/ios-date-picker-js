@@ -54,7 +54,7 @@ export interface IDatePickerProps {
 
 const DatePicker = ({
   minYear = 1900,
-  maxYear = 2020,
+  maxYear = new Date().getFullYear(),
   initialDate = new Date(),
   onConfirm,
 }: IDatePickerProps) => {
@@ -64,6 +64,7 @@ const DatePicker = ({
   const year = useRef(initialDate.getUTCFullYear());
   const hours = useRef(initialDate.getHours());
   const minutes = useRef(initialDate.getUTCMinutes());
+
   const [dayValues] = useState(
     getDayValues(daysInMonth(year.current, month.current))
   );
