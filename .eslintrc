@@ -1,0 +1,24 @@
+{
+  "extends": ["universe/native", "universe/shared/typescript-analysis"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.d.ts"],
+      "parserOptions": {
+        "ecmaFeatures": {
+          "jsx": true
+        },
+        "project": "./tsconfig.json"
+      }
+    }
+  ],
+  "env": {
+    "react-native/react-native": true
+  },
+  "plugins": ["react-native"],
+  "rules": {
+    "react-native/no-unused-styles": 1,
+    "react-native/no-inline-styles": 2,
+    "no-console": "error",
+    "@typescript-eslint/member-ordering": "warn"
+  }
+}

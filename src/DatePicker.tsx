@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 
-import PickerComponent from "./PickerComponent";
 import { ITEM_HEIGHT } from "./Constants";
+import PickerComponent from "./PickerComponent";
 
 const styles = StyleSheet.create({
   container: {
@@ -20,6 +20,9 @@ const styles = StyleSheet.create({
     height: ITEM_HEIGHT,
     justifyContent: "center",
   },
+  centerRow: { flexDirection: "row", alignItems: "center" },
+  widthTen: { width: 10 },
+  colorWhite: { color: "white" },
 });
 
 const getYearValues = (min: number, max: number) => {
@@ -72,7 +75,7 @@ export interface IDatePickerProps {
 
 const DatePicker = ({
   minYear = 1900,
-  maxYear = 2020,
+  maxYear = 2021,
   initialDate = new Date(),
   onConfirm,
 }: IDatePickerProps) => {
@@ -82,7 +85,7 @@ const DatePicker = ({
   const year = useRef(initialDate.getUTCFullYear());
   const hours = useRef(initialDate.getHours());
   const minutes = useRef(initialDate.getUTCMinutes());
-  const [dayValues] = useState(
+  const [dayValues, setDayValues] = useState(
     getDayValues(daysInMonth(year.current, month.current))
   );
   const getDate = () =>
@@ -98,7 +101,7 @@ const DatePicker = ({
   return (
     <View style={styles.container}>
       <Button title="confirm" onPress={() => onConfirm(getDate())} />
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <View style={styles.centerRow}>
         <PickerComponent
           onChange={(day: number) => (date.current = day)}
           flex={1}
@@ -108,9 +111,9 @@ const DatePicker = ({
         <PickerComponent
           onChange={(monthPosition: number) => {
             month.current = monthPosition;
-            // setDayValues(
-            //   getDayValues(daysInMonth(year.current, month.current))
-            // );
+            setDayValues(
+              getDayValues(daysInMonth(year.current, month.current))
+            );
           }}
           flex={1.5}
           values={monthValues}
@@ -126,7 +129,7 @@ const DatePicker = ({
             ({ value }) => value === year.current
           )}
         />
-        <View style={{ width: 10 }} />
+        <View style={styles.widthTen} />
         <PickerComponent
           onChange={(hourPosition: number) => (hours.current = hourPosition)}
           flex={1}
@@ -134,7 +137,7 @@ const DatePicker = ({
           defaultValue={hours.current}
         />
         <View style={styles.separator}>
-          <Text style={{ color: "white" }}>:</Text>
+          <Text style={styles.colorWhite}>:</Text>
         </View>
         <PickerComponent
           onChange={(minutePosition: number) =>

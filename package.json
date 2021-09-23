@@ -24,7 +24,7 @@
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-native": "^0.63.2",
-    "react-native-reanimated": "2.0.0-alpha.6.1"
+    "react-native-reanimated": "~2.2.0"
   },
   "devDependencies": {
     "@types/color": "^3.0.1",
@@ -35,9 +35,13 @@
     "babel-preset-expo": "^8.2.3",
     "babel-runtime": "^6.26.0",
     "eslint": "7.5.0",
+    "eslint-config-universe": "^7.0.1",
+    "eslint-plugin-react": "^7.26.0",
+    "eslint-plugin-react-native": "^3.11.0",
+    "prettier": "^2.4.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-native-reanimated": "2.0.0-alpha.6.1",
+    "react-native-reanimated": "~2.2.0",
     "rollup": "^1.29.0",
     "rollup-plugin-sass": "^1.2.2",
     "rollup-plugin-typescript2": "^0.25.3",

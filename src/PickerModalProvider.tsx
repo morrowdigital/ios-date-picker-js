@@ -1,6 +1,7 @@
 import React from "react";
-import { PickerModal, IModalDatePickerProps } from "./PickerModal";
+
 import { Provider } from "./Context";
+import { PickerModal, IModalDatePickerProps } from "./PickerModal";
 
 interface Props {
   children: React.ReactNode;
@@ -14,8 +15,7 @@ export class PickerModalProvider extends React.Component<Props> {
       callback: (date: Date) => void,
       options?: IModalDatePickerProps
     ) => {
-      this.PickerModalRef.current !== null &&
-        this.PickerModalRef.current.showPickerModal(callback, options);
+      this.PickerModalRef.current?.showPickerModal(callback, options);
     },
   });
 

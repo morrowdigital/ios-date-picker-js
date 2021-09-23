@@ -1,3 +1,9 @@
+import React, {
+  useState,
+  useRef,
+  useImperativeHandle,
+  PropsWithChildren,
+} from "react";
 import {
   BackHandler,
   StyleSheet,
@@ -7,12 +13,6 @@ import {
   TouchableWithoutFeedback,
   Modal,
 } from "react-native";
-import React, {
-  useState,
-  useRef,
-  useImperativeHandle,
-  PropsWithChildren,
-} from "react";
 
 import Picker from "./DatePicker";
 
@@ -95,7 +95,7 @@ export const PickerModal: React.ForwardRefExoticComponent<
             importantForAccessibility="yes"
             onPress={selectCancelButton}
           >
-            <View style={styles.sheetContainer}></View>
+            <View style={styles.sheetContainer} />
           </TouchableWithoutFeedback>
           <View style={styles.sheet}>
             <Picker
