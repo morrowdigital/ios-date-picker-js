@@ -18,12 +18,6 @@ import Animated, {
 import { ITEM_HEIGHT, PICKER_HEIGHT } from "../Constants";
 import { PickerItem } from "./PickerItem";
 
-type TFlatList = React.ComponentClass<
-  Animated.AnimateProps<FlatListProps<unknown>>,
-  IValue
->;
-const AnimatedFlatList: TFlatList = Animated.createAnimatedComponent(FlatList);
-
 const styles = StyleSheet.create({
   container: {
     height: PICKER_HEIGHT,
@@ -60,6 +54,8 @@ interface PickerProps {
   values: IValue[];
   flex: number;
   onChange: (value: number) => void;
+  onStartReached?: () => void;
+  onEndReached?: () => void;
 }
 
 const MaskElement = (
@@ -70,27 +66,92 @@ const MaskElement = (
   </View>
 );
 
+type TFlatList = React.ComponentClass<
+  Animated.AnimateProps<FlatListProps<unknown>>,
+  IValue
+>;
+const AnimatedFlatList: TFlatList = Animated.createAnimatedComponent(FlatList);
+
 const PickerComponent = ({
   values,
   defaultValue,
   flex,
   onChange,
+  onStartReached,
+  onEndReached,
 }: PickerProps) => {
   const ref = useRef<FlatList<IValue>>(null);
   const translateY = useSharedValue(0);
   const scrolled: Animated.SharedValue<boolean> = useSharedValue(false);
+  const maxValue = values.length - 1;
+
+  const onStartReachedInProgress = useRef(false);
+
+  const onEndReachedInProgress = useRef(false);
 
   useEffect(() => {
-    console.log(values, defaultValue);
-    if (defaultValue > values.length - 1) {
-      translateY.value = ITEM_HEIGHT * values.length - 1;
-      onChange(values.length - 1);
+    if (defaultValue > maxValue) {
+      ref?.current?.scrollToIndex({
+        index: maxValue,
+      });
+      onChange(maxValue);
     }
   }, [values]);
+
+  const maybeCallOnStartReached = async () => {
+    console.log("onStartReached", onStartReachedInProgress);
+    // If onStartReached has already been called for given data length, then ignore.
+    if (onStartReachedInProgress.current || !onStartReached) return;
+
+    onStartReachedInProgress.current = true;
+    ref?.current?.setNativeProps({ scrollEnabled: false });
+    onStartReached();
+    ref?.current?.scrollToOffset({
+      animated: true,
+      offset: ITEM_HEIGHT * 20,
+    });
+    ref?.current?.setNativeProps({ scrollEnabled: true });
+
+    // setTimeout(() => {
+    onStartReachedInProgress.current = false;
+    // }, 100);
+  };
+
+  const maybeCallOnEndReached = () => {
+    console.log("onEndReached");
+    // If onEndReached has already been called for given data length, then ignore.
+    if (onEndReachedInProgress.current || !onEndReached) return;
+
+    onEndReachedInProgress.current = true;
+    onEndReached();
+    ref?.current?.scrollToOffset({
+      animated: true,
+      offset: ITEM_HEIGHT * 20,
+    });
+    setTimeout(() => {
+      onEndReachedInProgress.current = false;
+    }, 100);
+  };
 
   const onScroll = useAnimatedScrollHandler<{ beginY?: number; endY?: number }>(
     {
       onScroll: (event) => {
+        const offset = event.contentOffset.y;
+        const visibleLength = event.layoutMeasurement.height;
+        const contentLength = event.contentSize.height;
+
+        // Check if scroll has reached either start of end of list.
+        const isScrollAtStart = offset < 100;
+        const isScrollAtEnd = contentLength - visibleLength - offset < 100;
+
+        if (isScrollAtStart) {
+          runOnJS(maybeCallOnStartReached)();
+        }
+
+        if (isScrollAtEnd) {
+          runOnJS(maybeCallOnEndReached)();
+        }
+
         translateY.value = event.contentOffset.y;
         const value = event.contentOffset.y / ITEM_HEIGHT;
         if (!scrolled.value) return (scrolled.value = true);
@@ -123,10 +184,12 @@ const PickerComponent = ({
         <AnimatedFlatList
           onLayout={() => {
             // initialise position
-            ref?.current?.scrollToIndex({
-              index: defaultValue,
-              animated: false,
-            });
+            if (defaultValue < maxValue) {
+              ref?.current?.scrollToIndex({
+                index: defaultValue,
+                animated: false,
+              });
+            }
             // track first load
             if (defaultValue === 0) {
               scrolled.value = true;
@@ -138,7 +201,7 @@ const PickerComponent = ({
             offset: ITEM_HEIGHT * index,
             index,
           })}
-          keyExtractor={({ label }) => label}
+          keyExtractor={(x) => x?.label}
           style={opacity}
           contentContainerStyle={styles.flatListContainer}
           data={values}
