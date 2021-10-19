@@ -99,8 +99,8 @@ export const PickerModal: React.ForwardRefExoticComponent<
           </TouchableWithoutFeedback>
           <View style={styles.sheet}>
             <Picker
-              minYear={options?.minYear}
-              maxYear={options?.maxYear}
+              // minYear={options?.minYear}
+              // maxYear={options?.maxYear}
               initialDate={options?.initialDate}
               onConfirm={onSelectLib}
             />

@@ -26,13 +26,17 @@ const styles = StyleSheet.create({
 });
 
 const getYearValues = (min: number, max: number) => {
-  const yearValues = new Array(max - min + 1)
-    .fill(0)
-    .map((_, i) => {
-      const value = min + i;
-      return { value, label: `${value}` };
-    })
-    .reverse();
+  // const yearValues = new Array(max - min + 1)
+  //   .fill(0)
+  //   .map((_, i) => {
+  //     const value = min + i;
+  //     return { value, label: `${value}` };
+  //   })
+  //   .reverse();
+  const yearValues = [];
+  for (let i = min; i < max; i++) {
+    yearValues.push({ value: i, label: `${i}` });
+  }
   return yearValues;
 };
 
@@ -74,17 +78,19 @@ export interface IDatePickerProps {
 }
 
 const DatePicker = ({
-  minYear = 1900,
-  maxYear = 2021,
+  minYear,
+  maxYear,
   initialDate = new Date(),
   onConfirm,
 }: IDatePickerProps) => {
-  const [yearValues] = useState(getYearValues(minYear, maxYear));
   const date = useRef(initialDate.getDate() - 1);
   const month = useRef(initialDate.getUTCMonth());
   const year = useRef(initialDate.getUTCFullYear());
   const hours = useRef(initialDate.getHours());
   const minutes = useRef(initialDate.getUTCMinutes());
+  const [yearValues, setYearValues] = useState(
+    getYearValues(minYear ?? year.current - 20, maxYear ?? year.current + 20)
+  );
   const [dayValues, setDayValues] = useState(
     getDayValues(daysInMonth(year.current, month.current))
   );
@@ -98,6 +104,25 @@ const DatePicker = ({
         minutes.current
       )
     );
+
+  const addPreviousYears = () => {
+    console.log("adding years");
+    const years = [...yearValues];
+    const oldestYear = years[0].value;
+    for (let i = 1; i <= 20; i++) {
+      years.unshift({ value: oldestYear - i, label: `${oldestYear - i}` });
+    }
+    setYearValues(years);
+  };
+
+  const addFutureYears = () => {
+    const years = [...yearValues];
+    const oldestYear = years[years.length - 1].value;
+    for (let i = 1; i <= 20; i++) {
+      years.push({ value: oldestYear + i, label: `${oldestYear + i}` });
+    }
+    setYearValues(years);
+  };
   return (
     <View style={styles.container}>
       <Button title="confirm" onPress={() => onConfirm(getDate())} />
@@ -125,6 +150,8 @@ const DatePicker = ({
           }
           flex={1.5}
           values={yearValues}
+          onStartReached={addPreviousYears}
+          onEndReached={addFutureYears}
           defaultValue={yearValues.findIndex(
             ({ value }) => value === year.current
           )}

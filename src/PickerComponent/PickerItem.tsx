@@ -54,8 +54,8 @@ export const PickerItem: FC<{
     };
   });
   return (
-    <Animated.View key={item.value} style={[styles.item, style]}>
-      <Text style={styles.label}>{item.label}</Text>
+    <Animated.View key={item?.value} style={[styles.item, style]}>
+      <Text style={styles.label}>{item?.label}</Text>
     </Animated.View>
   );
 };
